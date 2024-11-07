@@ -1,16 +1,15 @@
-.chart-area{
-    padding: 10px;
-    margin-bottom: 20px;
-    border-radius: 20px;
-    height: 40vh;
-    background-color: rgba(21, 21, 21, 0.363);
-    box-shadow: 0 0px 8px #0d6dfdab;
+.chart-area {
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 20px;
+  height: 40vh;
+  background-color: rgba(21, 21, 21, 0.363);
+  box-shadow: 0 0px 8px #0d6dfdab;
 }
 @media screen and (max-width: 1080px) {
-    .chart-area{
-     padding: 2px;
-        height: 30vh;
-        font-size: 10px;
-    }
-
+  .chart-area {
+    padding: 2px;
+    height: 30vh;
+    font-size: 10px;
+  }
 }

@@ -1,0 +1,32 @@
+
+.course-proof img{
+    width: 200px;
+    height: 300px;
+    border-radius: 12px;
+}
+.course-card{
+    display: flex;
+}
+.course-details{
+width: 68%;
+}
+.course-details p{
+    line-height:1.2rem;
+    margin: 0%;
+    width: 98%;
+    margin: 0.4rem;
+    font-size: 1rem;
+    height: 1.2rem;
+    overflow: hidden;
+
+}
+.course-details p:last-child{
+    line-height:2rem;
+    margin: 0%;
+    width: 98%;
+    margin: 0.4rem;
+    font-size: 1rem;
+    height: 2rem;
+    overflow: hidden;
+
+}

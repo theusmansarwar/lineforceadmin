@@ -1,40 +1,48 @@
-import React, { useState, useEffect } from 'react';
-import { Button, TextField, FormControlLabel, Switch, Typography, Container } from '@mui/material';
-import { useNavigate, useLocation } from 'react-router-dom';
-import useDarkTheme from '../../Theme/useDarkTheme';
-import { ThemeProvider } from '@mui/material';
-import { updateCourses } from '../../DAL/edit';
-import { baseUrl } from '../../Config/Config';
+import React, { useState, useEffect } from "react";
+import {
+  Button,
+  TextField,
+  FormControlLabel,
+  Switch,
+  Typography,
+  Container,
+} from "@mui/material";
+import { useNavigate, useLocation } from "react-router-dom";
+import useDarkTheme from "../../Theme/useDarkTheme";
+import { ThemeProvider } from "@mui/material";
+import { updateCourses } from "../../DAL/edit";
+import { fileUrl } from "../../Config/Config";
 
 const CourseForm = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { theme } = useDarkTheme();
   const [formData, setFormData] = useState({
-    title: '',
+    title: "",
     thumbnail: null,
-    price: '',
-    description: '',
+    price: "",
+    description: "",
     is_paid: false,
-    id: ''
+    id: "",
   });
 
   const [selectedImagePreview, setSelectedImagePreview] = useState(null);
 
   useEffect(() => {
     if (location.state && location.state.course) {
-      const { title, thumbnail, price, description, is_paid, id } = location.state.course;
+      const { title, thumbnail, price, description, is_paid, id } =
+        location.state.course;
 
       setFormData({
-        title: title || '',
-        price: price || '',
-        description: description || '',
+        title: title || "",
+        price: price || "",
+        description: description || "",
         is_paid: is_paid || false,
-        id: id || '',
+        id: id || "",
       });
 
       if (thumbnail) {
-        setSelectedImagePreview(`${baseUrl}/${thumbnail}`); 
+        setSelectedImagePreview(`${fileUrl}/${thumbnail}`);
       }
     }
   }, [location.state]);
@@ -42,64 +50,65 @@ const CourseForm = () => {
   const handleChange = (event) => {
     const { name, value, type, checked, files } = event.target;
 
-    if (name === 'thumbnail') {
+    if (name === "thumbnail") {
       if (files.length > 0) {
-        const file = files[0]; 
+        const file = files[0];
         setFormData((prevData) => ({
           ...prevData,
-          thumbnail: file, 
+          thumbnail: file,
         }));
-        setSelectedImagePreview(URL.createObjectURL(file)); 
+        setSelectedImagePreview(URL.createObjectURL(file));
       } else {
         setFormData((prevData) => ({
           ...prevData,
           thumbnail: null,
         }));
-        setSelectedImagePreview(null); 
+        setSelectedImagePreview(null);
       }
     } else {
       setFormData((prevData) => ({
         ...prevData,
-        [name]: type === 'checkbox' ? checked : value,
+        [name]: type === "checkbox" ? checked : value,
       }));
     }
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const confirmSubmit = window.confirm("Are you sure you want to update the course?");
-    
+    const confirmSubmit = window.confirm(
+      "Are you sure you want to update the course?"
+    );
+
     if (confirmSubmit) {
-        const formDataToSend = new FormData();
-        formDataToSend.append('title', formData.title);
-        formDataToSend.append('price', formData.price);
-        formDataToSend.append('description', formData.description);
-        formDataToSend.append('is_paid', formData.is_paid ? '1' : '0');
-        formDataToSend.append('_method', 'PUT');
-        
-        if (formData.thumbnail) {
-            formDataToSend.append('thumbnail', formData.thumbnail);
-        }
+      const formDataToSend = new FormData();
+      formDataToSend.append("title", formData.title);
+      formDataToSend.append("price", formData.price);
+      formDataToSend.append("description", formData.description);
+      formDataToSend.append("is_paid", formData.is_paid ? "1" : "0");
+      formDataToSend.append("_method", "PUT");
 
-        try {
-            const response = await updateCourses(formDataToSend, formData.id);
-            
-            if (response.status) {
-                alert("Course updated successfully.");
-                navigate('/courses'); // Redirect on success
-            } else {
-                alert('Error updating course: ' + response.message); // Show server error
-                console.error('Error updating course:', response.message);
-            }
-        } catch (error) {
-            alert("An error occurred while updating the course. Please try again."); // Network or unexpected error
-            console.error('Error updating course:', error);
+      if (formData.thumbnail) {
+        formDataToSend.append("thumbnail", formData.thumbnail);
+      }
+
+      try {
+        const response = await updateCourses(formDataToSend, formData.id);
+
+        if (response.status) {
+          alert("Course updated successfully.");
+          navigate("/courses"); // Redirect on success
+        } else {
+          alert("Error updating course: " + response.message); // Show server error
+          console.error("Error updating course:", response.message);
         }
+      } catch (error) {
+        alert("An error occurred while updating the course. Please try again."); // Network or unexpected error
+        console.error("Error updating course:", error);
+      }
     } else {
-        console.log("Course update canceled by the user.");
+      console.log("Course update canceled by the user.");
     }
-};
-
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -155,7 +164,7 @@ const CourseForm = () => {
               <img
                 src={selectedImagePreview}
                 alt="Thumbnail Preview"
-                style={{ width: '20%', height: 'auto', marginBottom: '16px' }}
+                style={{ width: "20%", height: "auto", marginBottom: "16px" }}
               />
             </div>
           )}
@@ -165,7 +174,7 @@ const CourseForm = () => {
             accept="image/*"
             name="thumbnail"
             onChange={handleChange}
-            style={{ margin: '20px 0' }}
+            style={{ margin: "20px 0" }}
           />
           <Button variant="contained" color="primary" type="submit" fullWidth>
             Submit

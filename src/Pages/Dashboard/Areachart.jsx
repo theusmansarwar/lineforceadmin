@@ -1,6 +1,4 @@
-
-
-import React from 'react';
+import React from "react";
 import {
   AreaChart,
   Area,
@@ -10,9 +8,7 @@ import {
   Tooltip,
   ResponsiveContainer,
   Legend,
-} from 'recharts';
-
-
+} from "recharts";
 
 const Areachart = () => {
   const visitorsData = [
@@ -40,29 +36,46 @@ const Areachart = () => {
     { day: "22", visitors: 180 },
     { day: "23", visitors: 150 },
     { day: "24", visitors: 174 },
-   
-];
+  ];
   return (
-    <div className='chart-area'>
-    <ResponsiveContainer width="100%" height='100%'>
-      <AreaChart
-        data={visitorsData}
-        margin={{
-          top: 20,
-          right: 30,
-          left: 10,
-          bottom: 5,
-        }}
-      >
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="day" label={{ value: 'Hours', position: 'insideBottomRight', offset: -5 }} />
-        <YAxis label={{ value: 'No of Visitors', angle: -90, position: 'insideLeft' }} 
-        tickFormatter={(tick) => Math.round(tick)} />
-        <Tooltip />
-        <Legend  />
-        <Area type="monotone" dataKey="visitors" stroke="#004ab8" fill="#004ab8" />
-      </AreaChart>
-    </ResponsiveContainer>
+    <div className="chart-area">
+      <ResponsiveContainer width="100%" height="100%">
+        <AreaChart
+          data={visitorsData}
+          margin={{
+            top: 20,
+            right: 30,
+            left: 10,
+            bottom: 5,
+          }}
+        >
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis
+            dataKey="day"
+            label={{
+              value: "Hours",
+              position: "insideBottomRight",
+              offset: -5,
+            }}
+          />
+          <YAxis
+            label={{
+              value: "No of Visitors",
+              angle: -90,
+              position: "insideLeft",
+            }}
+            tickFormatter={(tick) => Math.round(tick)}
+          />
+          <Tooltip />
+          <Legend />
+          <Area
+            type="monotone"
+            dataKey="visitors"
+            stroke="#004ab8"
+            fill="#004ab8"
+          />
+        </AreaChart>
+      </ResponsiveContainer>
     </div>
   );
 };

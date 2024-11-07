@@ -1,11 +1,17 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { BrowserRouter } from 'react-router-dom';
+import ReactDOM from 'react-dom/client';
+import { BrowserRouter, BrowserRouter as Router } from 'react-router-dom';
 import AppWrapper from './Appwraper';
 
-ReactDOM.render(
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+
+root.render(
+ 
   <BrowserRouter basename="/admin">
-    <AppWrapper />
-  </BrowserRouter>,
-  document.getElementById('root')
+   
+      <AppWrapper />
+  
+  </BrowserRouter>
+
 );

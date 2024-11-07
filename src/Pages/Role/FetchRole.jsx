@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { fetchRole, deleteRole, editRole } from '../../DAL/role';
+import React, { useEffect, useState } from "react";
+import { fetchRole, deleteRole, editRole } from "../../DAL/role";
 import { MdModeEditOutline, MdDelete } from "react-icons/md";
 
 const FetchRole = () => {
   const [roleData, setRoleData] = useState([]);
   const [editingRoleId, setEditingRoleId] = useState(null);
-  const [editValue, setEditValue] = useState('');
+  const [editValue, setEditValue] = useState("");
 
   const getAllRoles = async () => {
     const result = await fetchRole();
@@ -27,13 +27,13 @@ const FetchRole = () => {
   const handleSave = async (e, id) => {
     e.preventDefault();
     const formData = new FormData();
-    formData.append('name', editValue);
-    formData.append('_method', 'put');
+    formData.append("name", editValue);
+    formData.append("_method", "put");
 
     const result = await editRole(formData, id);
     if (result.status === true) {
       alert(`Updated role ID ${id} with value: ${editValue}`);
-      setEditingRoleId(null); 
+      setEditingRoleId(null);
       getAllRoles();
     }
   };
@@ -63,7 +63,9 @@ const FetchRole = () => {
             {editingRoleId === data.id ? (
               <button onClick={(e) => handleSave(e, data.id)}>Save</button>
             ) : (
-              <MdModeEditOutline onClick={() => handleEditClick(data.id, data.name)} />
+              <MdModeEditOutline
+                onClick={() => handleEditClick(data.id, data.name)}
+              />
             )}
             <MdDelete onClick={() => handleDelete(data.id)} />
           </li>

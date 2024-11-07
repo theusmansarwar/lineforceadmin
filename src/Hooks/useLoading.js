@@ -1,6 +1,6 @@
 // src/hooks/useLoading.js
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 /**
  * Custom hook to manage loading state and display a loader.

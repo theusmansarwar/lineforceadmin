@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React from "react";
 import {
   LineChart,
   Line,
@@ -9,9 +8,8 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
-} from 'recharts';
-import './Chart.css'
-
+} from "recharts";
+import "./Chart.css";
 
 const VisitorsChart = () => {
   const visitorsData = [
@@ -45,30 +43,39 @@ const VisitorsChart = () => {
     { day: "28", visitors: 172 },
     { day: "29", visitors: 165 },
     { day: "30", visitors: 186 },
-];
+  ];
 
-console.log(visitorsData);
+  console.log(visitorsData);
 
   return (
-    <div className='chart-area'>
-    <ResponsiveContainer width="100%" height="100%">
-      <LineChart
-        data={visitorsData}
-        margin={{
-          top: 20,
-          right: 30,
-          left: 10,
-          bottom: 5,
-        }}
-      >
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="day" label={{ value: 'Days', position: 'insideBottomRight', offset: -5 }} />
-        <YAxis label={{ value: 'No of Visitors', angle: -90, position: 'insideLeft' }}  />
-        <Tooltip  />
-        <Legend  />
-        <Line type="monotone" dataKey="visitors" stroke="#004ab8"  />
-      </LineChart>
-    </ResponsiveContainer>
+    <div className="chart-area">
+      <ResponsiveContainer width="100%" height="100%">
+        <LineChart
+          data={visitorsData}
+          margin={{
+            top: 20,
+            right: 30,
+            left: 10,
+            bottom: 5,
+          }}
+        >
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis
+            dataKey="day"
+            label={{ value: "Days", position: "insideBottomRight", offset: -5 }}
+          />
+          <YAxis
+            label={{
+              value: "No of Visitors",
+              angle: -90,
+              position: "insideLeft",
+            }}
+          />
+          <Tooltip />
+          <Legend />
+          <Line type="monotone" dataKey="visitors" stroke="#004ab8" />
+        </LineChart>
+      </ResponsiveContainer>
     </div>
   );
 };
