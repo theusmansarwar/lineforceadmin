@@ -21,10 +21,9 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import useDarkTheme from "../Theme/useDarkTheme";
 import { fetchUsers, fetchPayments } from "../DAL/fetch";
 import { formatDate } from "../Utils/Formatedate";
-import {  useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export function useTable({ headCells, title }) {
-  
   const navigate = useNavigate();
   const [selected, setSelected] = useState([]);
   const [page, setPage] = useState(0);
@@ -99,27 +98,58 @@ export function useTable({ headCells, title }) {
   const renderRow = (row) => {
     return headCells.map((headCell) => {
       if (headCell.id === "status") {
+        let statusText = "";
+        let color = "";
+
+        switch (row[headCell.id]) {
+          case 0:
+            statusText = "New";
+            color = "blue";
+            break;
+          case 1:
+            statusText = "Accepted";
+            color = "green";
+            break;
+          case 2:
+            statusText = "Pending";
+            color = "orange";
+            break;
+          case 3:
+            statusText = "Rejected";
+            color = "red";
+            break;
+          default:
+            statusText = "Unknown";
+            color = "gray";
+        }
+
         return (
           <TableCell
             key={headCell.id}
             align="left"
             style={{
-              color: row[headCell.id] === 0 ? "red" : "green",
+              color: color,
               fontWeight: "bold",
             }}
           >
-            {row[headCell.id] === 0 ? "Pending" : "Accepted"}
+            {statusText}
           </TableCell>
         );
       }
+
       if (headCell.id === "action") {
         return (
-          <TableCell key={headCell.id} align="left" style={{ cursor:'pointer' , textDecoration:'underline' }} onClick={()=>{navigate(`/payment/${row.id}`)}}>
+          <TableCell
+            key={headCell.id}
+            align="left"
+            style={{ cursor: 'pointer', textDecoration: 'underline' }}
+            onClick={() => navigate(`/payment/${row.id}`)}
+          >
             View
           </TableCell>
         );
       }
-  
+
       return (
         <TableCell key={headCell.id} align={headCell.numeric ? "right" : "left"}>
           {headCell.id === "created_at"
@@ -129,7 +159,7 @@ export function useTable({ headCells, title }) {
       );
     });
   };
-  
+
   const tableUI = (
     <ThemeProvider theme={theme}>
       <Box sx={{ width: "100%" }}>
@@ -177,7 +207,6 @@ export function useTable({ headCells, title }) {
                     />
                   </TableCell>
                   {headCells.map((headCell) => (
-                    
                     <TableCell
                       key={headCell.id}
                       align={headCell.numeric ? "right" : "left"}

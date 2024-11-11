@@ -21,6 +21,8 @@ import Banners from "./Pages/Banner/Banners";
 import AddBanners from "./Pages/Banner/AddBanners";
 import EditBanners from "./Pages/Banner/EditBanners";
 import PaymentDetail from "./Pages/Payments/PaymentDetail";
+import EnrollUser from "./Pages/Enroll/EnrollUser";
+import { FaBookReader } from "react-icons/fa";
 function App({ onLogout, message }) {
   const navigate = useNavigate();
   const [isExpanded, setIsExpanded] = useState(false);
@@ -77,6 +79,13 @@ function App({ onLogout, message }) {
                 <BsPostcardHeartFill />
                 <span className="list-text">Banners</span>
               </li>
+              <li
+                className={activeItem === "Enroll" ? "active" : ""}
+                onClick={() => handleItemClick("Enroll", "/enroll")}
+              >
+                <FaBookReader />
+                <span className="list-text">Enroll Users</span>
+              </li>
             </div>
             <div>
               <li onClick={onLogout}>
@@ -111,6 +120,7 @@ function App({ onLogout, message }) {
             <Route path="/add-syllabus/:id" element={<CreateSyllabus />} />
             <Route path="/syllabus-edit" element={<EditSyllabus />} />
             <Route path="/payment/:id" element={<PaymentDetail />} />
+            <Route path="/enroll" element={<EnrollUser />} />
           </Routes>
         </div>
       </div>

@@ -84,3 +84,15 @@ export const fetchDashboard = async () => {
   };
   return invokeApi(reqObj);
 };
+export const fetchPaidCourses = async () => {
+  const reqObj = {
+    path: `/api/admin/paidcourse/list`,
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("Token")}`,
+    },
+
+    body: {},
+  };
+  return invokeApi(reqObj);
+};

@@ -1,7 +1,7 @@
 {
   "name": "admin",
   "version": "0.1.0",
-  "homepage": "https://issbacademypak.com/admin",
+  "homepage": "https://issbacademypak.com/",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.13.3",

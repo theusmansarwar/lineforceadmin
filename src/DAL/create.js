@@ -38,3 +38,16 @@ export const createSyllabus = async (data) => {
   };
   return invokeApi(reqObj);
 };
+export const enrollUser = async (data) => {
+  console.log(...data, "djskfhjksdfks");
+  const reqObj = {
+    path: "/api/admin/enrolluser",
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("Token")}`,
+      "Content-Type": "multipart/form-data",
+    },
+    postData: data,
+  };
+  return invokeApi(reqObj);
+};
