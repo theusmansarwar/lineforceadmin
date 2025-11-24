@@ -24,9 +24,11 @@ const Syllabus = () => {
   // Pagination states
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [isLoading, setIsLoading]=useState(false);
   const [totalRecords, setTotalRecords] = useState(0);
 
   const getSyllabus = async (currentPage, rowsPerPage) => {
+    
     try {
       const response = await fetchSyllabus(id, currentPage + 1, rowsPerPage); // Ensure page starts from 1
       setData(response.data.data);

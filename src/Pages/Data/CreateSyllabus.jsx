@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, TextField, Typography, Container } from "@mui/material";
+import { Button, TextField, Typography, Container, CircularProgress } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import useDarkTheme from "../../Theme/useDarkTheme";
 import { ThemeProvider } from "@mui/material";
@@ -9,7 +9,7 @@ const CreateSyllabus = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { theme } = useDarkTheme();
-
+const [isLoading, setIsLoading]=useState(false);
   const [formData, setFormData] = useState({
     name: "",
     file: null,
@@ -50,7 +50,7 @@ const CreateSyllabus = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+setIsLoading(true);
     const formDataToSend = new FormData();
     formDataToSend.append("name", formData.name);
     formDataToSend.append("file", formData.file);
@@ -59,17 +59,34 @@ const CreateSyllabus = () => {
     try {
       const response = await createSyllabus(formDataToSend);
       if (response.status) {
+        setIsLoading(false);
         navigate(`/syllabus/${id}`);
       } else {
         console.error("Error creating Syllabus:", response.message);
+        setIsLoading(false);
       }
     } catch (error) {
       console.error("Error creating Syllabus:", error);
+      setIsLoading(false);
     }
   };
 
   return (
+ 
+    
     <ThemeProvider theme={theme}>
+        {isLoading ? (
+          <Container className="container" sx={{
+            height:"100vh",
+            width:"100%",
+            display:"flex",
+            alignItems:'center',
+            justifyContent:"center",
+            backgroundColor:'#03030393'
+          }}>
+       <CircularProgress size="100px" />
+       </Container>
+      ) : (
       <Container className="container" maxWidth="sm">
         <Typography
           className="form-name"
@@ -132,7 +149,9 @@ const CreateSyllabus = () => {
           </Button>
         </form>
       </Container>
+        )}
     </ThemeProvider>
+      
   );
 };
 

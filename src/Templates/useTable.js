@@ -16,12 +16,15 @@ import {
   Tooltip,
   TextField,
   ThemeProvider,
+  Container,
+  CircularProgress,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import useDarkTheme from "../Theme/useDarkTheme";
 import { fetchUsers, fetchPayments } from "../DAL/fetch";
 import { formatDate } from "../Utils/Formatedate";
 import { useNavigate } from "react-router-dom";
+import { deletePayments, deleteUsers } from "../DAL/delete";
 
 export function useTable({ headCells, title }) {
   const navigate = useNavigate();
@@ -31,15 +34,26 @@ export function useTable({ headCells, title }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [data, setData] = useState([]);
   const [totalRecords, setTotalRecords] = useState(0);
+    const [isLoading, setIsLoading]=useState(false);
+    const [debouncedSearch, setDebouncedSearch] = useState("");
+useEffect(() => {
+  const delayDebounce = setTimeout(() => {
+    setDebouncedSearch(searchTerm); // update debounced value
+  }, 500); // 500ms debounce
 
-  useEffect(() => {
-    const fetchData = async () => {
+  return () => clearTimeout(delayDebounce);
+}, [searchTerm]);
+
+ const fetchData = async () => {
+  setIsLoading(true);
       try {
         let response;
         if (title === "Users") {
-          response = await fetchUsers(page + 1, rowsPerPage, searchTerm);
+          response = await fetchUsers(page + 1, rowsPerPage, debouncedSearch);
+          setIsLoading(false);
         } else if (title === "Payments") {
-          response = await fetchPayments(page + 1, rowsPerPage, searchTerm);
+          response = await fetchPayments(page + 1, rowsPerPage, debouncedSearch);
+          setIsLoading(false);
         }
 
         if (response && response.data) {
@@ -47,12 +61,15 @@ export function useTable({ headCells, title }) {
           setTotalRecords(response.data.total || response.data.length);
         }
       } catch (error) {
+        setIsLoading(false);
         console.error(`Failed to fetch ${title}:`, error);
       }
     };
+  useEffect(() => {
+   
 
     fetchData();
-  }, [title, page, rowsPerPage, searchTerm]);
+  }, [title, page, rowsPerPage, debouncedSearch]);
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
@@ -94,6 +111,29 @@ export function useTable({ headCells, title }) {
 
   const isSelected = (id) => selected.indexOf(id) !== -1;
   const { theme } = useDarkTheme();
+const handleDelete = async () => {
+  if (selected.length === 0) return;
+
+  try {
+    let response;
+
+    if (title === "Users") {
+      response = await deleteUsers({ ids: selected });
+    } else if (title === "Payments") {
+      response = await deletePayments(selected);
+    }
+if(response.status){
+
+  fetchData();
+}
+
+    
+    setSelected([]);
+
+  } catch (error) {
+    console.error(`Failed to delete ${title}:`, error);
+  }
+};
 
   const renderRow = (row) => {
     return headCells.map((headCell) => {
@@ -162,6 +202,18 @@ export function useTable({ headCells, title }) {
 
   const tableUI = (
     <ThemeProvider theme={theme}>
+      {isLoading ? (
+                <Container className="container" sx={{
+                  height:"100vh",
+                  width:"100%",
+                  display:"flex",
+                  alignItems:'center',
+                  justifyContent:"center",
+                  backgroundColor:'#03030393'
+                }}>
+             <CircularProgress size="100px" />
+             </Container>
+            ) : (
       <Box sx={{ width: "100%" }}>
         <Paper sx={{ width: "100%", maxHeight: "95vh" }}>
           <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -169,7 +221,7 @@ export function useTable({ headCells, title }) {
               {selected.length > 0 ? (
                 <Tooltip title="Delete">
                   <IconButton>
-                    <DeleteIcon />
+                    <DeleteIcon onClick={()=>{handleDelete()}} />
                   </IconButton>
                 </Tooltip>
               ) : (
@@ -258,6 +310,7 @@ export function useTable({ headCells, title }) {
           />
         </Paper>
       </Box>
+            )}
     </ThemeProvider>
   );
 

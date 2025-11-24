@@ -6,6 +6,7 @@ import {
   Switch,
   Typography,
   Container,
+  CircularProgress,
 } from "@mui/material";
 import { useNavigate, useLocation } from "react-router-dom";
 import useDarkTheme from "../../Theme/useDarkTheme";
@@ -17,6 +18,8 @@ const CourseForm = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { theme } = useDarkTheme();
+  
+  const [isLoading, setIsLoading]=useState(false);
   const [formData, setFormData] = useState({
     title: "",
     thumbnail: null,
@@ -24,6 +27,7 @@ const CourseForm = () => {
     description: "",
     is_paid: false,
     id: "",
+    author:"Awais ISSB"
   });
 
   const [selectedImagePreview, setSelectedImagePreview] = useState(null);
@@ -39,6 +43,7 @@ const CourseForm = () => {
         description: description || "",
         is_paid: is_paid || false,
         id: id || "",
+        author:"Awais ISSB"
       });
 
       if (thumbnail) {
@@ -74,10 +79,12 @@ const CourseForm = () => {
   };
 
   const handleSubmit = async (event) => {
+
     event.preventDefault();
     const confirmSubmit = window.confirm(
       "Are you sure you want to update the course?"
     );
+    setIsLoading(true)
 
     if (confirmSubmit) {
       const formDataToSend = new FormData();
@@ -85,6 +92,7 @@ const CourseForm = () => {
       formDataToSend.append("price", formData.price);
       formDataToSend.append("description", formData.description);
       formDataToSend.append("is_paid", formData.is_paid ? "1" : "0");
+       formDataToSend.append("author",formData.author);
       formDataToSend.append("_method", "PUT");
 
       if (formData.thumbnail) {
@@ -95,13 +103,16 @@ const CourseForm = () => {
         const response = await updateCourses(formDataToSend, formData.id);
 
         if (response.status) {
+           setIsLoading(false)
           alert("Course updated successfully.");
           navigate("/courses"); // Redirect on success
         } else {
+           setIsLoading(false)
           alert("Error updating course: " + response.message); // Show server error
           console.error("Error updating course:", response.message);
         }
       } catch (error) {
+         setIsLoading(false)
         alert("An error occurred while updating the course. Please try again."); // Network or unexpected error
         console.error("Error updating course:", error);
       }
@@ -112,6 +123,18 @@ const CourseForm = () => {
 
   return (
     <ThemeProvider theme={theme}>
+      {isLoading ? (
+          <Container className="container" sx={{
+            height:"100vh",
+            width:"100%",
+            display:"flex",
+            alignItems:'center',
+            justifyContent:"center",
+            backgroundColor:'#03030393'
+          }}>
+       <CircularProgress size="100px" />
+       </Container>
+      ) : (
       <Container maxWidth="sm">
         <Typography variant="h4" component="h1" gutterBottom>
           Edit Course
@@ -181,6 +204,7 @@ const CourseForm = () => {
           </Button>
         </form>
       </Container>
+      )}
     </ThemeProvider>
   );
 };

@@ -6,7 +6,7 @@ import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
-import { ThemeProvider } from "@mui/material";
+import { CircularProgress, Container, ThemeProvider } from "@mui/material";
 import useDarkTheme from "../../Theme/useDarkTheme";
 import { fileUrl } from "../../Config/Config";
 import { fetchCourses } from "../../DAL/fetch";
@@ -65,6 +65,7 @@ const Courses = () => {
 
   return (
     <ThemeProvider theme={theme}>
+      
       <div className="buttonsection">
         <Button
           variant="contained"
@@ -83,9 +84,17 @@ const Courses = () => {
 
       <Grid container spacing={3}>
         {loading ? (
-          <Typography variant="h6" component="div" padding={"20px"}>
-            Loading courses...
-          </Typography>
+          <Container className="container" sx={{
+            height:"100vh",
+            width:"100%",
+            display:"flex",
+            alignItems:'center',
+            justifyContent:"center",
+            backgroundColor:'#03030393'
+          }}>
+       <CircularProgress size="100px" />
+       </Container>
+     
         ) : data.length > 0 ? (
           data.map((course) => (
             <Grid item xs={12} sm={6} md={3} key={course.id}>

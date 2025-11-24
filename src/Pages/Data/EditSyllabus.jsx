@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button, TextField, Typography, Container } from "@mui/material";
+import { Button, TextField, Typography, Container, CircularProgress } from "@mui/material";
 import { useNavigate, useLocation } from "react-router-dom";
 import useDarkTheme from "../../Theme/useDarkTheme";
 import { ThemeProvider } from "@mui/material";
@@ -17,6 +17,7 @@ const EditSyllabus = () => {
     course_id: "",
     id: "",
   });
+  const [isLoading, setIsLoading]=useState(false);
 
   const [filePreview, setFilePreview] = useState(null);
   const [fileType, setFileType] = useState(""); // State to store the file type
@@ -72,7 +73,7 @@ const EditSyllabus = () => {
   // Handle form submission
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+setIsLoading(true)
     const formDataToSend = new FormData();
     formDataToSend.append("name", formData.name);
     formDataToSend.append("course_id", formData.course_id);
@@ -84,17 +85,32 @@ const EditSyllabus = () => {
     try {
       const response = await updateSyllabus(formDataToSend, formData.id);
       if (response.status) {
+        setIsLoading(false)
         navigate(`/syllabus/${formData.course_id}`);
       } else {
+        setIsLoading(false)
         console.error("Error updating syllabus:", response.message);
       }
     } catch (error) {
+      setIsLoading(false)
       console.error("Error updating syllabus:", error);
     }
   };
 
   return (
     <ThemeProvider theme={theme}>
+       {isLoading ? (
+                <Container className="container" sx={{
+                  height:"100vh",
+                  width:"100%",
+                  display:"flex",
+                  alignItems:'center',
+                  justifyContent:"center",
+                  backgroundColor:'#03030393'
+                }}>
+             <CircularProgress size="100px" />
+             </Container>
+            ) : (
       <Container className="container" maxWidth="sm">
         <Typography
           className="form-name"
@@ -151,6 +167,7 @@ const EditSyllabus = () => {
           </Button>
         </form>
       </Container>
+            )}
     </ThemeProvider>
   );
 };

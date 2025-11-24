@@ -37,3 +37,26 @@ export const deleteSyllabus = async (id) => {
   };
   return invokeApi(reqObj);
 };
+export const deleteUsers = async (ids) => {
+
+  const reqObj = {
+    path: `/api/delete/users`,
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("Token")}`,
+    },
+
+    postData: ids,
+  };
+  return invokeApi(reqObj);
+};
+
+export const deletePayments = async (ids) => {
+  return await fetch(`/api/payments/delete`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ ids }),
+  });
+};

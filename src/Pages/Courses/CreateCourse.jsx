@@ -6,6 +6,7 @@ import {
   Switch,
   Typography,
   Container,
+  CircularProgress,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import useDarkTheme from "../../Theme/useDarkTheme";
@@ -16,6 +17,7 @@ const CreateCourse = () => {
   const navigate = useNavigate();
   const { theme } = useDarkTheme();
 
+const [isLoading, setIsLoading]=useState(false);
   const [formData, setFormData] = useState({
     title: "",
     thumbnail: null,
@@ -58,6 +60,7 @@ const CreateCourse = () => {
     const confirmSubmit = window.confirm(
       "Are you sure you want to submit the course?"
     );
+     setIsLoading(true)
 
     if (confirmSubmit) {
       const formDataToSend = new FormData();
@@ -71,13 +74,16 @@ const CreateCourse = () => {
       try {
         const response = await createCourses(formDataToSend);
         if (response.status) {
+           setIsLoading(false)
           alert("Course Submit Sucessfully!");
           navigate("/courses");
         } else {
+           setIsLoading(false)
           alert("Error creating course: " + response.message);
           console.error("Error creating course:", response.message);
         }
       } catch (error) {
+         setIsLoading(false)
         alert("An error occurred while creating the course. Please try again.");
         console.error("Error creating course:", error);
       }
@@ -88,6 +94,18 @@ const CreateCourse = () => {
 
   return (
     <ThemeProvider theme={theme}>
+      {isLoading ? (
+          <Container className="container" sx={{
+            height:"100vh",
+            width:"100%",
+            display:"flex",
+            alignItems:'center',
+            justifyContent:"center",
+            backgroundColor:'#03030393'
+          }}>
+       <CircularProgress size="100px" />
+       </Container>
+      ) : (
       <Container maxWidth="sm">
         <Typography variant="h4" component="h1" gutterBottom>
           Add Course
@@ -162,6 +180,7 @@ const CreateCourse = () => {
           </Button>
         </form>
       </Container>
+      )}
     </ThemeProvider>
   );
 };
